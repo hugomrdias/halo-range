@@ -7,7 +7,7 @@ This is for advanced users.
 ## Install
 
 ```
-$ npm install --save-dev halo-range
+$ npm install --save halo-range
 ```
 
 ## Usage
