@@ -15,7 +15,6 @@ $ npm install --save-dev halo-range
 
 ## Related
 
-- [eslint:recommended](https://github.com/eslint/eslint/blob/master/conf/eslint.json) - ESLint recommended rules
 - [Styling and scripting sliders PPK](http://www.quirksmode.org/blog/archives/2015/11/styling_and_scr.html)
 - [Example](http://www.quirksmode.org/sliders/sliders.html)
 - [MDL example](http://getmdl.io/components/index.html#sliders-section)
