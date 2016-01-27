@@ -59,7 +59,7 @@ Utils.clearRules = function clearRules(style) {
 
 Utils.calculateWebkitFill = function calculateWebkitFill(element, selector, colorLower, colorUpper) {
     var gradValue = Math.round((element.value / element.getAttribute('max') * 1) * 100);
-    var grad = 'linear-gradient(90deg,'+colorLower+' ' + gradValue + '%,'+ colorUpper+' ' + (gradValue + 1) + '%)';
+    var grad = 'linear-gradient(90deg,' + colorLower + ' ' + gradValue + '%,' + colorUpper + ' ' + (gradValue + 1) + '%)';
     var styleString = '';
 
     styleString += selector + '::-webkit-slider-runnable-track {background: ' + grad + ';} ';
