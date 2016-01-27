@@ -11,27 +11,43 @@
   ],
   "main": "index.js",
   "scripts": {
-    "lint": "eslint --cache --fix src/*.js",
     "release:patch": "npm version patch -m \"chore(release): Bump to %s\"",
     "release:minor": "npm version minor -m \"chore(release): Bump to %s\"",
     "release:major": "npm version major -m \"chore(release): Bump to %s\"",
     "postversion": "git push --follow-tags",
-    "test": "faucet",
-    "test:watch": "watch faucet",
-    "dev": "browser-sync start --files 'test/*' --server 'test' & watchify test/script.js -d -o test/bundle.js -v"
+    "lint:js": "eslint --cache --fix src/*.js",
+    "lint:css": "stylelint src/*.css",
+    "css": "postcss -u stylelint -u autoprefixer --autoprefixer.browsers '> 5%' -u postcss-browser-reporter -o test/style.css ./src/style.css",
+    "css:watch": "npm run css -- -w -m",
+    "test": "npm run lint:js && npm run lint:css",
+    "start": "browser-sync start --files 'test/*' --server 'test' & watchify test/script.js -d -o test/bundle.js -v & npm run css:watch"
   },
   "dependencies": {
-    "lodash": "3.10.1"
   },
   "devDependencies": {
+    "autoprefixer": "6.3.1",
     "browser-sync": "2.11.1",
     "eslint": "1.10.3",
     "eslint-config-halo": "0.1.4",
-    "faucet": "0.0.1",
-    "tape": "4.4.0",
+    "postcss-browser-reporter": "0.4.0",
+    "postcss-cli": "2.4.0",
+    "stylelint": "4.1.0",
+    "stylelint-config-standard": "2.0.0",
     "watchify": "3.7.0"
   },
   "eslintConfig": {
     "extends": "halo"
+  },
+  "stylelint": {
+    "extends": "stylelint-config-standard",
+    "rules": {
+      "indentation": 4,
+      "string-quotes": "single",
+      "max-empty-lines": 2,
+      "comment-empty-line-before": [ "always", {
+        "except": ["first-nested"],
+        "ignore": ["stylelint-commands"]
+      } ]
+    }
   }
 }
