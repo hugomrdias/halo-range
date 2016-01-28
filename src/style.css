@@ -4,7 +4,7 @@
     normaly something like a <label>
  */
 
-.RangeContainer {
+.Range {
     position: relative;
     display: inline-block;
     height: 34px;
@@ -12,7 +12,7 @@
     outline: 0;
 }
 
-.Range {
+.Range-input {
     appearance: none;
     user-select: none;
     box-sizing: border-box;
@@ -32,18 +32,18 @@
     Some tweaks to normalize input range
  */
 
-.Range:focus,
-.Range:hover,
-.Range:active {
+.Range-input:focus,
+.Range-input:hover,
+.Range-input:active {
     outline: none;
     background: transparent;
 }
 
-.Range::-ms-tooltip {
+.Range-input::-ms-tooltip {
     display: none;
 }
 
-.Range::-moz-focus-outer {
+.Range-input::-moz-focus-outer {
     border: 0;
     background: transparent;
 }
@@ -53,7 +53,7 @@
     Thumbs style for the diferent vendors
  */
 
-.Range::-webkit-slider-thumb {
+.Range-input::-webkit-slider-thumb {
     position: relative;
     appearance: none;
     cursor: ew-resize;
@@ -67,16 +67,16 @@
     transition: transform 0.18s linear, box-shadow 0.18s linear, border 0.18s linear, background 0.28s linear;
 }
 
-.Range:focus:not(:active)::-webkit-slider-thumb {
+.Range-input:focus:not(:active)::-webkit-slider-thumb {
     box-shadow: 0 0 0 8px rgba(80, 130, 224, 0.26);
 }
 
-.Range.Range--active::-webkit-slider-thumb,
-.Range:active::-webkit-slider-thumb {
+.Range--active > .Range-input::-webkit-slider-thumb,
+.Range-input:active::-webkit-slider-thumb {
     transform: scale(1.2);
 }
 
-.Range::-moz-range-thumb {
+.Range-input::-moz-range-thumb {
     cursor: ew-resize;
     box-sizing: border-box;
     width: 16px;
@@ -88,16 +88,16 @@
     transition: transform 0.18s linear, box-shadow 0.18s linear;
 }
 
-.Range:focus:not(:active)::-moz-range-thumb {
+.Range-input:focus:not(:active)::-moz-range-thumb {
     box-shadow: 0 0 0 8px rgba(80, 130, 224, 0.26);
 }
 
-.Range.Range--active::-moz-range-thumb,
-.Range:active::-moz-range-thumb {
+.Range--active > .Range-input::-moz-range-thumb,
+.Range-input:active::-moz-range-thumb {
     transform: scale(1.2);
 }
 
-.Range::-ms-thumb {
+.Range-input::-ms-thumb {
     /* IE needs diferent margin-top to align */
     margin-top: 5px;
     display: inline-block;
@@ -109,13 +109,13 @@
     transition: transform 0.18s linear, box-shadow 0.18s linear;
 }
 
-.Range:focus:not(:active)::-ms-thumb {
+.Range-input:focus:not(:active)::-ms-thumb {
     /* revert box-shadow for IE overflow bug */
     box-shadow: none;
 }
 
-.Range.Range--active::-ms-thumb,
-.Range:active::-ms-thumb {
+.Range--active > .Range-input::-ms-thumb,
+.Range-input:active::-ms-thumb {
     /* revert transform for IE  overflow bug */
     transform: none;
 }
@@ -125,7 +125,7 @@
     Track styles for diferent vendors
  */
 
-.Range::-webkit-slider-runnable-track {
+.Range-input::-webkit-slider-runnable-track {
     width: 100%;
     height: 3px;
     border: none;
@@ -134,7 +134,7 @@
     padding: 0;
 }
 
-.Range::-moz-range-track {
+.Range-input::-moz-range-track {
     width: 100%;
     height: 3px;
     border: none;
@@ -143,7 +143,7 @@
     padding: 0;
 }
 
-.Range::-ms-track {
+.Range-input::-ms-track {
     color: transparent;
     border-color: transparent;
     border: none;
@@ -159,11 +159,11 @@
     Blink and Webkit needs JS
 */
 
-.Range::-moz-range-progress {
+.Range-input::-moz-range-progress {
     background-color: #5082e0;
 }
 
-.Range::-ms-fill-lower {
+.Range-input::-ms-fill-lower {
     background-color: #5082e0;
 }
 
@@ -175,10 +175,10 @@
 .Range-tooltip {
     position: absolute;
     background: rgba(0, 0, 0, 0.6);
-    width: 30px;
-    height: 25px;
-    padding: 0 5px;
-    line-height: 25px;
+    width: auto;
+    height: 30px;
+    padding: 5px 10px;
+    line-height: 20px;
     text-align: center;
     color: white;
     border-radius: 2px;
@@ -190,35 +190,35 @@
     transition: opacity 0.18s linear;
 }
 
-.Range.Range--active + .Range-tooltip,
-.Range:active + .Range-tooltip,
-.Range:hover + .Range-tooltip,
-.Range:focus + .Range-tooltip {
+.Range--active > .Range-input + .Range-tooltip,
+.Range-input:active + .Range-tooltip,
+.Range-input:hover + .Range-tooltip,
+.Range-input:focus + .Range-tooltip {
     opacity: 1;
 }
 
 
 /* Initial modifier */
 
-.Range.Range--initial::-webkit-slider-thumb {
+.Range--initial > .Range-input::-webkit-slider-thumb {
     border: 2px solid #ccc;
     background-color: white;
 }
 
-.Range.Range--initial:focus:not(:active)::-webkit-slider-thumb {
+.Range--initial > .Range-input:focus:not(:active)::-webkit-slider-thumb {
     box-shadow: 0 0 0 8px rgba(204, 204, 204, 0.26);
 }
 
-.Range.Range--initial::-moz-range-thumb {
+.Range--initial > .Range-input::-moz-range-thumb {
     border: 2px solid #ccc;
     background-color: white;
 }
 
-.Range.Range--initial:focus:not(:active)::-moz-range-thumb {
+.Range--initial > .Range-input:focus:not(:active)::-moz-range-thumb {
     box-shadow: 0 0 0 8px rgba(204, 204, 204, 0.26);
 }
 
-.Range.Range--initial::-ms-thumb {
+.Range--initial > .Range-input::-ms-thumb {
     border: 2px solid #ccc;
     background-color: white;
 }
