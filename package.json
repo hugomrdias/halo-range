@@ -19,10 +19,13 @@
     "lint:css": "stylelint src/*.css",
     "css": "postcss -u stylelint -u autoprefixer --autoprefixer.browsers '> 5%' -u postcss-browser-reporter -o test/style.css ./src/style.css",
     "css:watch": "npm run css -- -w -m",
+    "serve": "browser-sync start --files 'test/style.css, test/bundle.js, test/index.html' --server 'test'",
     "test": "npm run lint:js && npm run lint:css",
-    "start": "browser-sync start --files 'test/*' --server 'test' & watchify test/script.js -d -o test/bundle.js -v & npm run css:watch"
+    "start": "npm run serve & watchify index.js -s Range -d -o test/bundle.js -v & npm run css:watch"
   },
   "dependencies": {
+    "camelcase": "2.1.0",
+    "lodash.assign": "4.0.1"
   },
   "devDependencies": {
     "autoprefixer": "6.3.1",
@@ -44,10 +47,17 @@
       "indentation": 4,
       "string-quotes": "single",
       "max-empty-lines": 2,
-      "comment-empty-line-before": [ "always", {
-        "except": ["first-nested"],
-        "ignore": ["stylelint-commands"]
-      } ]
+      "comment-empty-line-before": [
+        "always",
+        {
+          "except": [
+            "first-nested"
+          ],
+          "ignore": [
+            "stylelint-commands"
+          ]
+        }
+      ]
     }
   }
 }
