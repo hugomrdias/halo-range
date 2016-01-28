@@ -20,7 +20,7 @@
     <meta name="theme-color" content="#37474F">
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
     <link rel="stylesheet" type="text/css" href="//rawgit.com/suitcss/base/master/lib/base.css">
-    <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&subset=latin' rel='stylesheet' type='text/css'>
+    <!-- <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&subset=latin' rel='stylesheet' type='text/css'> -->
     <style type="text/css">
     html,
     body {
@@ -39,15 +39,18 @@
 
 <body>
     <main>
-        <label class="RangeContainer">
-            <input name="test" class="Range" type="range" min="0" max="10" step="1" value="0">
+        <label class="Range Range--initial" for="test">
+            <input name="test" class="Range-input" type="range" min="0" max="10" step="1" value="0">
             <output for="test" class="Range-tooltip">0</output>
         </label>
         <label>
-            <input type="range" min="0" max="10" step="1" value="0">
+            <input type="range" min="0" max="10" step="1" value="0"/>
         </label>
+        <button id="play">Play</button>
+        <button id="pause">Pause</button>
     </main>
     <script src="bundle.js"></script>
+    <script src="script.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html-inspector/0.8.2/html-inspector.js"></script>
     <script type="text/javascript">
     HTMLInspector.inspect()
