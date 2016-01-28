@@ -1,5 +1,51 @@
 'use strict';
+var camelCase = require('camelcase');
 var Utils = {};
+var style = document.createElement('p').style;
+var prefixes = 'O ms Moz Webkit'.split(' ');
+var hasPrefix = /^(o|ms|moz|webkit)/;
+var upper = /([A-Z])/g;
+
+Utils.cache = {};
+
+Utils.capitalize = function(string) {
+    return string.charAt(0).toUpperCase() + string.substring(1);
+};
+
+Utils.prefixed = function(key) {
+    var camelCaseKey = camelCase(key);
+    var i = prefixes.length;
+    var name;
+    var capitalizedKey;
+
+    if (typeof style[camelCaseKey] !== 'undefined') {
+        return camelCaseKey;
+    }
+
+    capitalizedKey = Utils.capitalize(camelCaseKey);
+    while (i--) {
+        name = prefixes[i] + capitalizedKey;
+        if (typeof style[name] !== 'undefined') {
+            return name;
+        }
+    }
+
+    return false;
+};
+
+// cache transform
+Utils.cache.transform = Utils.prefixed('transform');
+
+Utils.prefixedCSS = function(key) {
+    var prefixedKey = Utils.prefixed(key);
+
+    if (upper.test(prefixedKey)) {
+        prefixedKey = (hasPrefix.test(prefixedKey) ? '-' : '') + prefixedKey.replace(upper, '-$1');
+        return prefixedKey.toLowerCase();
+    }
+
+    return key;
+};
 
 Utils.prefix = (function() {
     var styles = window.getComputedStyle(document.documentElement, '');
@@ -36,27 +82,6 @@ Utils.insertSheet = function insertSheet(id) {
     return style;
 };
 
-Utils.addCssRule = function addCSSRule(style, selector, rules, index) {
-    var sheet = style.sheet;
-
-    if ('insertRule' in sheet) {
-        sheet.insertRule(selector + '{' + rules + '}', index);
-    } else if ('addRule' in sheet) {
-        sheet.addRule(selector, rules, index);
-    }
-};
-
-Utils.clearRules = function clearRules(style) {
-    var i;
-    var sheet = style.sheet;
-
-    if (sheet.cssRules.length > 0) {
-        for (i = sheet.cssRules.length - 1; i >= 0; i--) {
-            sheet.deleteRule(0);
-        }
-    }
-};
-
 Utils.calculateWebkitFill = function calculateWebkitFill(element, selector, colorLower, colorUpper) {
     var gradValue = Math.round((element.value / element.getAttribute('max') * 1) * 100);
     var grad = 'linear-gradient(90deg,' + colorLower + ' ' + gradValue + '%,' + colorUpper + ' ' + (gradValue + 1) + '%)';
@@ -67,25 +92,9 @@ Utils.calculateWebkitFill = function calculateWebkitFill(element, selector, colo
     return styleString;
 };
 
-Utils.findOutput = function findOutput(elem) {
-    var siblings = elem.parentNode.childNodes;
-    var i;
-    var outputTag;
-    var sibling;
-
-    for (i = 0; i < siblings.length; i++) {
-        sibling = siblings[i];
-        if (sibling.id === elem.id && (sibling.nodeName === 'OUTPUT')) {
-            outputTag = sibling;
-        }
-    }
-
-    return outputTag;
-};
-
-Utils.updateTooltip = function updateTooltip(input, output, thumbWidth) {
+Utils.translateTooltip = function translateTooltip(input, tooltip, thumbWidth) {
     var width = input.offsetWidth;
-    var offset = output.offsetWidth / 2 - thumbWidth / 2;
+    var offset = tooltip.offsetWidth / 2 - thumbWidth / 2;
     var newPoint = (input.value - input.getAttribute('min')) / (input.getAttribute('max') - input.getAttribute('min'));
     var newPlace;
 
@@ -97,8 +106,19 @@ Utils.updateTooltip = function updateTooltip(input, output, thumbWidth) {
         newPlace = width * newPoint - (offset + (thumbWidth * newPoint));
     }
 
-    output.style.left = newPlace + 'px';
-    output.textContent = input.value;
+    tooltip.style[Utils.cache.transform] = 'translate3d(' + newPlace + 'px, 0 , 0)';
+};
+
+Utils.simulateEvent = function eventFire(el, etype) {
+    var evObj;
+
+    if (el.fireEvent) {
+        el.fireEvent('on' + etype);
+    } else {
+        evObj = document.createEvent('Events');
+        evObj.initEvent(etype, true, false);
+        el.dispatchEvent(evObj);
+    }
 };
 
 module.exports = Utils;
