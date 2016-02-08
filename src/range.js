@@ -32,7 +32,7 @@ function Range(element, options) {
     this.selectors = this.options.selectors;
     this.input = this.options.input || this.element.querySelector(this.selectors.input);
     this.tooltip = this.options.tooltip || this.element.querySelector(this.selectors.tooltip);
-    this.values = this.options.values;
+    this.values = null;
     this.timer = null;
     this.style = utils.insertSheet('Range');
 
@@ -41,23 +41,31 @@ function Range(element, options) {
     this.element.addEventListener('touchend', this);
     this.element.addEventListener('blur', this);
 
-    if (this.tooltip) {
-        this.tooltip.innerHTML = this.value();
-        utils.translateTooltip(this.input, this.tooltip, this.options.thumbWidth);
-    }
-
-    if (this.values) {
-        this.processValues();
+    if (this.options.values) {
+        this.setValues(this.options.values);
     }
 }
 
 module.exports = Range;
 
-Range.prototype.processValues = function() {
+Range.prototype.setValues = function(values) {
+    this.values = values;
     this.input.setAttribute('min', 0);
     this.input.setAttribute('max', this.values.length - 1);
     this.input.setAttribute('step', 1);
     this.input.setAttribute('value', 0);
+
+    if (this.tooltip) {
+        this.tooltip.innerHTML = this.value();
+        utils.translateTooltip(this.input, this.tooltip, this.options.thumbWidth);
+    }
+    return this;
+};
+
+Range.prototype.setValue = function(value) {
+    this.input.value = value;
+    utils.simulateEvent(this.input, 'input');
+    return this;
 };
 
 Range.prototype.value = function() {
@@ -68,24 +76,37 @@ Range.prototype.next = function() {
     var nextValue = parseInt(this.input.value, 10) + parseInt(this.input.getAttribute('step'), 10);
 
     if (nextValue <= parseInt(this.input.getAttribute('max'), 10)) {
-        this.input.value = nextValue;
-        utils.simulateEvent(this.input, 'input');
+        this.setValue(nextValue);
     } else {
-        this.input.blur();
-        window.clearInterval(this.timer);
+        this.pause();
     }
     return this;
 };
 
 Range.prototype.play = function() {
+    if (this.timer) {
+        this.pause();
+    }
+
+    if (parseInt(this.input.getAttribute('max'), 10) === parseInt(this.input.value, 10)) {
+        this.input.focus();
+        this.setValue(this.input.getAttribute('min'));
+        this.timer = window.setInterval(this.next.bind(this), this.options.delay);
+        return this;
+    }
+
     this.input.focus();
     this.next();
     this.timer = window.setInterval(this.next.bind(this), this.options.delay);
+
+    return this;
 };
 
 Range.prototype.pause = function() {
     this.input.blur();
     window.clearInterval(this.timer);
+    this.timer = null;
+    return this;
 };
 
 Range.prototype.handleEvent = function(e) {
