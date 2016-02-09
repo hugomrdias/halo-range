@@ -68,8 +68,10 @@ Range.prototype.setValue = function(value) {
     return this;
 };
 
-Range.prototype.value = function() {
-    return this.values ? this.values[this.input.value] : this.input.value;
+Range.prototype.value = function(position) {
+    var index = position || this.input.value;
+    
+    return this.values ? this.values[index] : this.input.value;
 };
 
 Range.prototype.next = function() {
