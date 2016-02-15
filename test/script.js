@@ -2,22 +2,49 @@
 
 var range = window.Range;
 
-var r1 = range(document.querySelector('.Range'), {
-    values: ['aaaa', '1', '<i>aaaaaaa</i>', '<i>b</i>', '<i>c</i>', '<i>daaaaaaa</i>', '<i>z</i>']
+var rangeA = range(document.getElementById('range-js'), {
+    webkitFill: {
+        active: true,
+        colorLower: '#3f51b5',
+        colorUpper: 'rgba(0, 0, 0, 0.26)',
+        colorUpperActive: 'rgba(0, 0, 0, 0.38)'
+    },
+    selectors: {
+        input: '#input-js',
+        tooltip: '#range-js > .Range-tooltip'
+    }
 });
 
 document.querySelector('#play').addEventListener('click', function() {
-    r1.play();
+    rangeA.play();
 });
 
 document.querySelector('#pause').addEventListener('click', function() {
-    r1.pause();
+    rangeA.pause();
 });
 
-document.querySelector('.Range').addEventListener('input', function() {
-    // console.log('input')
+document.querySelector('#enable').addEventListener('click', function() {
+    rangeA.enable();
 });
 
-document.querySelector('.Range').addEventListener('change', function() {
-    // console.log('change')
+document.querySelector('#disable').addEventListener('click', function() {
+    rangeA.disable();
+});
+
+var rangeH = range(document.getElementById('range-h'), {
+    values: ['ddd', '0', 13, '<small>sss</small>', 100],
+    webkitFill: {
+        active: true,
+        colorLower: '#3f51b5',
+        colorUpper: 'rgba(0, 0, 0, 0.26)',
+        colorUpperActive: 'rgba(0, 0, 0, 0.38)'
+    },
+    selectors: {
+        input: '#input-h',
+        tooltip: '#range-h > .Range-tooltip'
+    }
+});
+
+document.querySelector('#destroy').addEventListener('click', function() {
+    rangeH.destroy();
 });

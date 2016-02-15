@@ -82,12 +82,16 @@ Utils.insertSheet = function insertSheet(id) {
     return style;
 };
 
-Utils.calculateWebkitFill = function calculateWebkitFill(element, selector, colorLower, colorUpper) {
+Utils.calculateWebkitFill = function calculateWebkitFill(element, selector, activeClass, colorLower, colorUpper, colorUpperActive) {
     var gradValue = Math.round((element.value / element.getAttribute('max') * 1) * 100);
     var grad = 'linear-gradient(90deg,' + colorLower + ' ' + gradValue + '%,' + colorUpper + ' ' + (gradValue + 1) + '%)';
+    var gradActive = 'linear-gradient(90deg,' + colorLower + ' ' + gradValue + '%,' + colorUpperActive + ' ' + (gradValue + 1) + '%)';
     var styleString = '';
 
     styleString += selector + '::-webkit-slider-runnable-track {background: ' + grad + ';} ';
+    styleString += selector + ':focus:not(:active)::-webkit-slider-runnable-track,' +
+        '.' + activeClass + ' > ' + selector + '::-webkit-slider-runnable-track,' +
+        selector + ':active::-webkit-slider-runnable-track {background: ' + gradActive + ';} ';
 
     return styleString;
 };
@@ -106,7 +110,7 @@ Utils.translateTooltip = function translateTooltip(input, tooltip, thumbWidth) {
         newPlace = width * newPoint - (offset + (thumbWidth * newPoint));
     }
 
-    tooltip.style[Utils.cache.transform] = 'translate3d(' + newPlace + 'px, 0 , 0)';
+    tooltip.style[Utils.cache.transform] = 'translateX(' + newPlace + 'px)';
 };
 
 Utils.simulateEvent = function eventFire(el, etype) {

@@ -1,6 +1,17 @@
 /*
+    Variables
+*/
+
+:root {
+    --color-primary: #3f51b5;
+    --color-off: rgba(0, 0, 0, 0.26);
+    --color-off-focused: rgba(0, 0, 0, 0.38);
+}
+
+
+/*
     We need a container for positioning the tooltip and other stuff
-    size the container and for the children just 100% for sizes
+    Size the container and for the children just 100% for sizes
     normaly something like a <label>
  */
 
@@ -9,6 +20,7 @@
     display: inline-block;
     height: 34px;
     width: 100%;
+    margin: 0;
     outline: 0;
 }
 
@@ -51,8 +63,11 @@
 
 /*
     Thumbs style for the diferent vendors
+    margin-top -thumb height / 2 + track height / 2
  */
 
+
+/* Webkit */
 .Range-input::-webkit-slider-thumb {
     position: relative;
     appearance: none;
@@ -62,13 +77,13 @@
     height: 16px;
     border: none;
     border-radius: 50%;
-    background-color: #5082e0;
-    margin-top: calc(-16px / 2 + 1.5px);
+    background-color: var(--color-primary);
+    margin-top: calc(-16px / 2 + 1px);
     transition: transform 0.18s linear, box-shadow 0.18s linear, border 0.18s linear, background 0.28s linear;
 }
 
 .Range-input:focus:not(:active)::-webkit-slider-thumb {
-    box-shadow: 0 0 0 8px rgba(80, 130, 224, 0.26);
+    box-shadow: 0 0 0 8px color(var(--color-primary) a(26%));
 }
 
 .Range--active > .Range-input::-webkit-slider-thumb,
@@ -76,6 +91,7 @@
     transform: scale(1.2);
 }
 
+/* Mozilla */
 .Range-input::-moz-range-thumb {
     cursor: ew-resize;
     box-sizing: border-box;
@@ -83,13 +99,13 @@
     height: 16px;
     border: none;
     border-radius: 50%;
-    background-color: #5082e0;
-    margin-top: calc(-16px / 2 + 1.5px);
-    transition: transform 0.18s linear, box-shadow 0.18s linear;
+    background-color: var(--color-primary);
+    margin-top: calc(-16px / 2 + 1px);
+    transition: transform 0.18s linear, box-shadow 0.18s linear, border 0.18s linear, background 0.28s linear;
 }
 
 .Range-input:focus:not(:active)::-moz-range-thumb {
-    box-shadow: 0 0 0 8px rgba(80, 130, 224, 0.26);
+    box-shadow: 0 0 0 8px color(var(--color-primary) a(26%));
 }
 
 .Range--active > .Range-input::-moz-range-thumb,
@@ -97,18 +113,23 @@
     transform: scale(1.2);
 }
 
+/* Microsoft */
 .Range-input::-ms-thumb {
     /* IE needs diferent margin-top to align */
-    margin-top: 5px;
+    margin-top: 4px;
     display: inline-block;
     width: 16px;
     height: 16px;
     border: none;
     border-radius: 50%;
-    background-color: #5082e0;
-    transition: transform 0.18s linear, box-shadow 0.18s linear;
+    background-color: var(--color-primary));
+    transition: transform 0.18s linear, box-shadow 0.18s linear, border 0.18s linear, background 0.28s linear;
 }
 
+/*
+    to have focus and active effects the input[text]
+    needs to have the same height as the biggest thumb
+ */
 .Range-input:focus:not(:active)::-ms-thumb {
     /* revert box-shadow for IE overflow bug */
     box-shadow: none;
@@ -127,20 +148,34 @@
 
 .Range-input::-webkit-slider-runnable-track {
     width: 100%;
-    height: 3px;
+    height: 2px;
     border: none;
     border-radius: 2px;
-    background-color: #ccc;
+    background-color: var(--color-off);
     padding: 0;
+    transition: background 0.28s linear;
+}
+
+.Range-input:focus:not(:active)::-webkit-slider-runnable-track,
+.Range--active > .Range-input::-webkit-slider-runnable-track,
+.Range-input:active::-webkit-slider-runnable-track {
+    background-color: var(--color-off-focused);
 }
 
 .Range-input::-moz-range-track {
     width: 100%;
-    height: 3px;
+    height: 2px;
     border: none;
     border-radius: 2px;
-    background-color: #ccc;
+    background-color: var(--color-off);
     padding: 0;
+    transition: background 0.28s linear;
+}
+
+.Range-input:focus:not(:active)::-moz-range-track,
+.Range--active > .Range-input::-moz-range-track,
+.Range-input:active::-moz-range-track {
+    background-color: var(--color-off-focused);
 }
 
 .Range-input::-ms-track {
@@ -148,25 +183,82 @@
     border-color: transparent;
     border: none;
     width: 100%;
-    height: 3px;
+    height: 2px;
     border-radius: 2px;
-    background-color: #ccc;
+    background-color: var(--color-off);
+    transition: background 0.28s linear;
 }
 
+.Range-input:focus:not(:active)::-ms-track,
+.Range--active > .Range-input::-ms-track,
+.Range-input:active::-ms-track {
+    background-color: var(--color-off-focused);
+}
 
 /*
-    Color the track for Moz and MS.
+    Fill the track for Moz and MS.
     Blink and Webkit needs JS
 */
 
 .Range-input::-moz-range-progress {
-    background-color: #5082e0;
+    background-color: var(--color-primary);
+    height: 2px;
 }
 
 .Range-input::-ms-fill-lower {
-    background-color: #5082e0;
+    background-color: var(--color-primary);
+    height: 2px;
 }
 
+/*
+    Input disabled
+*/
+.Range-input:disabled::-webkit-slider-thumb {
+    background-color: #ccc;
+    width: 14px;
+    height: 14px;
+    border: 2px solid white;
+    margin-top: calc(-14px / 2 + 1px);
+    transform: none !important;
+}
+
+.Range-input:disabled::-moz-range-thumb {
+    background-color: #ccc;
+    width: 14px;
+    height: 14px;
+    border: 2px solid white;
+    margin-top: calc(-14px / 2 + 1px);
+    transform: none !important;
+}
+
+.Range-input:disabled::-ms-thumb {
+    margin-top: 3px;
+    background-color: #ccc;
+    width: 14px;
+    height: 14px;
+    border: 2px solid white;
+    transform: none !important;
+}
+
+.Range-input:disabled::-webkit-slider-runnable-track {
+    background: var(--color-off) !important;
+}
+
+.Range-input:disabled::-moz-range-track {
+    background: var(--color-off) !important;
+}
+
+.Range-input:disabled::-ms-track {
+    background: var(--color-off) !important;
+}
+
+.Range-input:disabled::-moz-range-progress {
+    background-color: transparent;
+}
+
+.Range-input:disabled::-ms-fill-lower {
+    background-color: transparent;
+}
 
 /*
     Tooltip descendent
@@ -190,6 +282,10 @@
     transition: opacity 0.18s linear;
 }
 
+.Range-input:disabled + .Range-tooltip {
+    opacity: 0 !important;
+}
+
 .Range--active > .Range-input + .Range-tooltip,
 .Range-input:active + .Range-tooltip,
 .Range-input:hover + .Range-tooltip,
@@ -197,30 +293,61 @@
     opacity: 1;
 }
 
-
 /* Initial modifier */
 
 .Range--initial > .Range-input::-webkit-slider-thumb {
-    border: 2px solid #ccc;
+    border: 2px solid var(--color-off);
     background-color: white;
+}
+
+.Range--initial > .Range-input:disabled::-webkit-slider-thumb {
+    border: 2px solid white !important;
+    background-color: #ccc;
 }
 
 .Range--initial > .Range-input:focus:not(:active)::-webkit-slider-thumb {
-    box-shadow: 0 0 0 8px rgba(204, 204, 204, 0.26);
+    box-shadow: 0 0 0 8px color(var(--color-off) a(10%));
+}
+
+.Range--initial > .Range-input:focus:not(:active)::-webkit-slider-thumb,
+.Range--initial.Range--active > .Range-input::-webkit-slider-thumb,
+.Range--initial > .Range-input:active::-webkit-slider-thumb {
+    border-color: var(--color-off-focused);
 }
 
 .Range--initial > .Range-input::-moz-range-thumb {
-    border: 2px solid #ccc;
+    border: 2px solid var(--color-off);
     background-color: white;
+}
+
+.Range--initial > .Range-input:disabled::-moz-range-thumb {
+    border: 2px solid white !important;
+    background-color: #ccc;
 }
 
 .Range--initial > .Range-input:focus:not(:active)::-moz-range-thumb {
-    box-shadow: 0 0 0 8px rgba(204, 204, 204, 0.26);
+    box-shadow: 0 0 0 8px color(var(--color-off) a(10%));
+}
+
+.Range--initial > .Range-input:focus:not(:active)::-moz-range-thumb,
+.Range--initial.Range--active > .Range-input::-moz-range-thumb,
+.Range--initial > .Range-input:active::-moz-range-thumb {
+    border-color: var(--color-off-focused);
 }
 
 .Range--initial > .Range-input::-ms-thumb {
-    border: 2px solid #ccc;
+    border: 2px solid var(--color-off);
     background-color: white;
+}
+
+.Range--initial > .Range-input:focus:not(:active)::-ms-thumb {
+    box-shadow: none;
+}
+
+.Range--initial > .Range-input:focus:not(:active)::-ms-thumb,
+.Range--initial.Range--active > .Range-input::-ms-thumb,
+.Range--initial > .Range-input:active::-ms-thumb {
+    border-color: var(--color-off-focused);
 }
 
 

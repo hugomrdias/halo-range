@@ -2,16 +2,18 @@
 
 var utils = require('./utils');
 var assign = require('lodash.assign');
+var debounce = require('lodash.debounce');
 var defaults = {
     values: null,
-    tooltip: null,
-    input: null,
-    colorLower: '#5082e0',
-    colorUpper: '#cccccc',
+    webkitFill: {
+        active: false,
+        colorLower: '#3f51b5',
+        colorUpper: 'rgba(0, 0, 0, 0.26)',
+        colorUpperActive: 'rgba(0, 0, 0, 0.38)'
+    },
     thumbWidth: 16,
     delay: 2000,
     selectors: {
-        container: '.Range',
         input: '.Range-input',
         tooltip: '.Range-tooltip'
     },
@@ -30,23 +32,46 @@ function Range(element, options) {
     this.options = assign({}, defaults, options);
     this.classes = this.options.classes;
     this.selectors = this.options.selectors;
-    this.input = this.options.input || this.element.querySelector(this.selectors.input);
-    this.tooltip = this.options.tooltip || this.element.querySelector(this.selectors.tooltip);
+    this.input = this.element.querySelector(this.selectors.input);
+    this.tooltip = this.element.querySelector(this.selectors.tooltip);
     this.values = null;
     this.timer = null;
     this.style = utils.insertSheet('Range');
 
-    this.element.addEventListener('input', this);
     this.element.addEventListener('touchstart', this);
     this.element.addEventListener('touchend', this);
-    this.element.addEventListener('blur', this);
+    this.input.addEventListener('input', this);
+    this.input.addEventListener('blur', this);
+
+    this.onResize = debounce(function() {
+        if (this.tooltip) {
+            this.tooltip.innerHTML = this.value();
+            utils.translateTooltip(this.input, this.tooltip, this.options.thumbWidth);
+        }
+    }, 300).bind(this);
+    window.addEventListener('resize', this.onResize, false);
 
     if (this.options.values) {
         this.setValues(this.options.values);
     }
+
+    this.onInput();
 }
 
 module.exports = Range;
+
+Range.prototype.destroy = function() {
+    window.removeEventListener('resize', this.onResize, false);
+    this.element.removeEventListener('touchstart', this);
+    this.element.removeEventListener('touchend', this);
+    this.input.removeEventListener('input', this);
+    this.input.removeEventListener('blur', this);
+    this.style.parentNode.removeChild(this.style);
+    window.clearInterval(this.timer);
+    this.timer = null;
+    this.values = null;
+    return this;
+};
 
 Range.prototype.setValues = function(values) {
     this.values = values;
@@ -55,10 +80,6 @@ Range.prototype.setValues = function(values) {
     this.input.setAttribute('step', 1);
     this.input.setAttribute('value', 0);
 
-    if (this.tooltip) {
-        this.tooltip.innerHTML = this.value();
-        utils.translateTooltip(this.input, this.tooltip, this.options.thumbWidth);
-    }
     return this;
 };
 
@@ -68,14 +89,33 @@ Range.prototype.setValue = function(value) {
     return this;
 };
 
+Range.prototype.disable = function() {
+    this.input.disabled = true;
+    if (this.timer) {
+        this.pause();
+    }
+};
+
+Range.prototype.enable = function() {
+    this.input.disabled = false;
+};
+
+Range.prototype.isEnabled = function() {
+    return !this.input.disabled;
+};
+
 Range.prototype.value = function(position) {
     var index = position || this.input.value;
-    
+
     return this.values ? this.values[index] : this.input.value;
 };
 
 Range.prototype.next = function() {
     var nextValue = parseInt(this.input.value, 10) + parseInt(this.input.getAttribute('step'), 10);
+
+    if (!this.isEnabled()) {
+        return this;
+    }
 
     if (nextValue <= parseInt(this.input.getAttribute('max'), 10)) {
         this.setValue(nextValue);
@@ -90,16 +130,18 @@ Range.prototype.play = function() {
         this.pause();
     }
 
-    if (parseInt(this.input.getAttribute('max'), 10) === parseInt(this.input.value, 10)) {
-        this.input.focus();
-        this.setValue(this.input.getAttribute('min'));
-        this.timer = window.setInterval(this.next.bind(this), this.options.delay);
-        return this;
-    }
+    if (this.isEnabled()) {
+        if (parseInt(this.input.getAttribute('max'), 10) === parseInt(this.input.value, 10)) {
+            this.input.focus();
+            this.setValue(this.input.getAttribute('min'));
+            this.timer = window.setInterval(this.next.bind(this), this.options.delay);
+            return this;
+        }
 
-    this.input.focus();
-    this.next();
-    this.timer = window.setInterval(this.next.bind(this), this.options.delay);
+        this.input.focus();
+        this.next();
+        this.timer = window.setInterval(this.next.bind(this), this.options.delay);
+    }
 
     return this;
 };
@@ -141,12 +183,14 @@ Range.prototype.onTouchEnd = function() {
 Range.prototype.onInput = function() {
     this.input.setAttribute('data-value', this.value());
 
-    if (utils.prefix.lowercase === 'webkit') {
+    if (utils.prefix.lowercase === 'webkit' && this.options.webkitFill.active) {
         this.style.textContent = utils.calculateWebkitFill(
             this.input,
             this.options.selectors.input,
-            this.options.colorLower,
-            this.options.colorUpper
+            this.options.classes.active,
+            this.options.webkitFill.colorLower,
+            this.options.webkitFill.colorUpper,
+            this.options.webkitFill.colorUpperActive
         );
     }
 

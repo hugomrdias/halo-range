@@ -20,40 +20,104 @@
     <meta name="theme-color" content="#37474F">
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
     <link rel="stylesheet" type="text/css" href="//rawgit.com/suitcss/base/master/lib/base.css">
+    <link rel="stylesheet" type="text/css" href="//rawgit.com/suitcss/components-test/master/lib/test.css">
     <!-- <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&subset=latin' rel='stylesheet' type='text/css'> -->
     <style type="text/css">
     html,
     body {
         color: #444;
         font-family: 'Open Sans', sans-serif;
+        width: auto;
+        margin: 5px;
     }
 
-    main {
-        width: 100%;
-        margin: auto;
-        padding: 40px;
+    .Test-run--dark {
+        background-color: #424242;
     }
     </style>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <main>
-        <label class="Range Range--initial" for="test">
-            <input name="test" class="Range-input" type="range" min="0" max="10" step="1" value="0">
-            <output for="test" class="Range-tooltip">0</output>
-        </label>
-        <label>
-            <input type="range" min="0" max="10" step="1" value="0"/>
-        </label>
-        <button id="play">Play</button>
-        <button id="pause">Pause</button>
-    </main>
+    <div class="Test">
+        <h1 class="Test-title">Halo: <a href="https://github.com/hugomrdias/halo-range">Range</a> component tests</h1>
+        <h2 class="Test-describe">.Range</h2>
+        <h3 class="Test-it">Base</h3>
+        <div class="Test-run" id="a">
+            <label id="range-a" class="Range" for="input-a">
+                <input name="input-a" class="Range-input" type="range" min="0" max="100" value="5">
+            </label>
+        </div>
+        <h3 class="Test-it">Input disabled</h3>
+        <div class="Test-run" id="b">
+            <label id="range-b" class="Range" for="input-b">
+                <input name="input-b" class="Range-input" type="range" min="0" max="10" value="1" disabled="disabled">
+            </label>
+        </div>
+        <h3 class="Test-it">.Range--initial</h3>
+        <div class="Test-run" id="c">
+            <label id="range-c" class="Range Range--initial" for="input-c">
+                <input name="input-c" class="Range-input" type="range" min="0" max="100" value="0">
+            </label>
+        </div>
+        <h3 class="Test-it">.Range--active <small>same as native input active used for programmatic styling</small></h3>
+        <div class="Test-run" id="d">
+            <label id="range-d" class="Range Range--active" for="input-d">
+                <input name="input-d" class="Range-input" type="range" min="0" max="100" value="50">
+            </label>
+        </div>
+        <div class="Test-run" id="d2">
+            <label id="range-d2" class="Range Range--initial Range--active" for="input-d2">
+                <input name="input-d2" class="Range-input" type="range" min="0" max="100" value="50">
+            </label>
+        </div>
+        <h3 class="Test-it"> Output tag example <small>need form tag wrapper and IE has no support</small></h3>
+        <div class="Test-run" id="e">
+            <form>
+                <label id="range-e" class="Range" for="a" oninput="result.value=parseInt(a.value)">
+                    <input name="a" class="Range-input" type="range" min="0" max="100" value="0">
+                </label>
+                <output name="result" for="a" class="">0</output>
+            </form>
+        </div>
+        <h3 class="Test-it"> Base dark TODO</h3>
+        <div class="Test-run Test-run--dark" id="f">
+            <label id="range-f" class="Range" for="input-f">
+                <input name="input-f" class="Range-input" type="range" min="0" max="100" value="0">
+            </label>
+        </div>
+        <h2 class="Test-describe">With javascript</h2>
+        <h3 class="Test-it">Base</h3>
+        <div class="Test-run" id="g">
+            <label id="range-js" class="Range" for="input-js">
+                <input id="input-js" name="input-js" class="Range-input" type="range" min="0" max="100" step="1" value="5">
+                <output for="input-js" class="Range-tooltip">0</output>
+            </label>
+            <button id="play">Play</button>
+            <button id="pause">Pause</button>
+            <button id="enable">Enable</button>
+            <button id="disable">Disable</button>
+        </div>
+
+        <h3 class="Test-it">Custom values</h3>
+        <div class="Test-run" id="h">
+            <label id="range-h" class="Range" for="input-h">
+                <input id="input-h" name="input-h" class="Range-input" type="range" min="0" max="100" step="1" value="5">
+                <output for="input-h" class="Range-tooltip">0</output>
+            </label>
+            <button id="destroy">Destroy</button>
+        </div>
+
+        <h3 class="Test-it">Custom values</h3>
+        <div class="Test-run" id="h">
+        </div>
+    </div>
+
     <script src="bundle.js"></script>
     <script src="script.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html-inspector/0.8.2/html-inspector.js"></script>
     <script type="text/javascript">
-    HTMLInspector.inspect()
+    // HTMLInspector.inspect()
     </script>
 </body>
 
