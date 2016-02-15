@@ -220,6 +220,7 @@
     border: 2px solid white;
     margin-top: calc(-14px / 2 + 1px);
     transform: none !important;
+    cursor: not-allowed;
 }
 
 .Range-input:disabled::-moz-range-thumb {
@@ -229,6 +230,7 @@
     border: 2px solid white;
     margin-top: calc(-14px / 2 + 1px);
     transform: none !important;
+    cursor: not-allowed;
 }
 
 .Range-input:disabled::-ms-thumb {
@@ -238,6 +240,7 @@
     height: 14px;
     border: 2px solid white;
     transform: none !important;
+    cursor: not-allowed;
 }
 
 .Range-input:disabled::-webkit-slider-runnable-track {
