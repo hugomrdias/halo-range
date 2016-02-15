@@ -11,7 +11,8 @@ $ npm install --save halo-range
 ```
 
 ## Usage
-Check the examples [page](https://hugomrdias.github.io/halo-range/test) and the source in the test folder
+Check the examples [page](https://hugomrdias.github.io/halo-range/test) and code in the test folder.
+
 The CSS source is for PostCSS environments. Use the compiled version in the test folder for others.
 
 > The compiled version as sourcemaps inline and `autoprefixer.browsers '> 5%'`
